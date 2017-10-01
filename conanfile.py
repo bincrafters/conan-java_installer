@@ -35,10 +35,7 @@ class JavaConan(ConanFile):
         tools.unzip(bin_filename)
         os.unlink(bin_filename)
         os.rename(source_file, "java")
-            
-    def build(self):
-        pass            
-                    
+
     def package(self):
         self.copy(pattern="*", dst=".", src="java")
 
