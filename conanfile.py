@@ -2,10 +2,10 @@ from conans import ConanFile, tools, os
 from conans.tools import os_info
 
 
-class JavaConan(ConanFile):
+class JavaInstallerConan(ConanFile):
     name = "java_installer"
     version = "8.0.144"
-    url = "https://github.com/bincrafters/conan-java"
+    url = "https://github.com/bincrafters/conan-java_installer"
     description = "Java installer distributed via Conan"
     license = "https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/"
     no_copy_source = True
