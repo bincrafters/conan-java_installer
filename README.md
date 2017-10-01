@@ -1,21 +1,25 @@
-## This repository holds a conan recipe for Java.
+## This repository holds a conan recipe for Java. 
 
-[Conan.io](https://conan.io) package for [Java](https://github.com/abseil/abseil-cpp) project
+[Conan.io](https://conan.io) package for [Java](https://www.azul.com/downloads/zulu) project
 
-The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/Java%3Abincrafters).
+The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/java_installer%3Abincrafters).
 
 ## For Users: Use this package
 
+This Conan package contains the Java Development Kit (JDK).  It is cross platform and is intended to be used as a Conan "`build_requires`" for C++ projects which require Java to be built.  Google's build system "Bazel" is one particular example of a C++ build system which requires Java.  Note that this package will not interfere or interact with other installations of Java on the machine.  It passes the required environment variables to packages which `require` or `build_require` it through Conan's native `env_info` functionality.  
+
+This package is based on Azul Systems' Zulu build of OpenJDK.  It's a certified and stable build that and functionally equivalent to Oracle's (as well as IBM's, Redhat's, and other certified builds).  There are a number of advantages to using Zulu, which have caused many projects and organizations to use it as the default, including Microsoft Azure. If you are unfamilliar but interested in the differences between JDK providers, you are encouraged to research the topic. 
+
 ### Basic setup
 
-    $ conan install Java/8@bincrafters/testing
+    $ conan install java_installer/8.0.144@bincrafters/testing
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    Java/8@bincrafters/testing
+    java_installer/8.0.144@bincrafters/testing
 
     [generators]
     txt
@@ -30,9 +34,9 @@ Note: It is recommended that you run conan install from a build directory and no
 
 The example below shows the commands used to publish to bincrafters conan repository. To publish to your own conan respository (for example, after forking this git repository), you will need to change the commands below accordingly. 
 
-## Build and package 
+## Create and Package 
 
-The following command both runs all the steps of the conan file, and publishes the package to the local system cache.  This includes downloading dependencies from `build_requires` and `requires` , and then running the `build()` method. 
+The following command both runs all the steps of the conan file, and publishes the package to the local system cache. 
 
     $ conan create bincrafters/testing
 	
@@ -42,16 +46,8 @@ The following command both runs all the steps of the conan file, and publishes t
 
 ## Upload
 
-To upload a package with an alias involved, it's a three-step process. 
-
-The first step is standard, upload the concrete package you've recently built:
-
-    $ conan upload Java/8@bincrafters/testing --all -r bincrafters
-
-The second step is to update the "alias package": 
-
-	$ conan alias Java/latest@bincrafters/testing Java/8@bincrafters/testing
+    $ conan upload java_installer/8.0.144@bincrafters/testing --all -r bincrafters
 
 	
-### License
-[Apache License 2.0](LICENSE)
+## License
+[Zulu License](https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use)
