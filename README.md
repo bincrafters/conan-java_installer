@@ -1,5 +1,8 @@
 ## This repository holds a conan recipe for Java. 
 
+[![Appveyor Status](https://ci.appveyor.com/api/projects/status/fgsifwucqj8fo5pm/branch/stable/9.0.0?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-java-installer/branch/stable/9.0.0)
+[![Travis Status](https://travis-ci.org/bincrafters/conan-java_installer.svg?branch=stable%2F9.0.0)](https://travis-ci.org/bincrafters/conan-java_installer)
+
 [Conan.io](https://conan.io) package for [Java](https://www.azul.com/downloads/zulu) project
 
 The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/java_installer%3Abincrafters).
