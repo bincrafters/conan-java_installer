@@ -1,8 +1,7 @@
-## This repository holds a conan recipe for Java. 
-
-[![Appveyor Status](https://ci.appveyor.com/api/projects/status/fgsifwucqj8fo5pm/branch/testing/8.0.144?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-java-installer/branch/testing/8.0.144)
+[![Appveyor Status](https://ci.appveyor.com/api/projects/status/fgsifwucqj8fo5pm/branch/stable/8.0.144?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-java-installer/branch/stable/8.0.144)
 [![Travis Status](https://travis-ci.org/bincrafters/conan-java_installer.svg?branch=stable%2F8.0.144)](https://travis-ci.org/bincrafters/conan-java_installer)
 
+## This repository holds a conan recipe for Java. 
 [Conan.io](https://conan.io) package for [Java](https://www.azul.com/downloads/zulu) project
 
 The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/java_installer%3Abincrafters).
@@ -15,14 +14,14 @@ This package is based on Azul Systems' Zulu build of OpenJDK.  It's a certified 
 
 ### Basic setup
 
-    $ conan install java_installer/8.0.144@bincrafters/testing
+    $ conan install java_installer/8.0.144@bincrafters/stable
 
 ### Project setup
 
 If you handle multiple dependencies in your project is better to add a *conanfile.txt*
 
     [requires]
-    java_installer/8.0.144@bincrafters/testing
+    java_installer/8.0.144@bincrafters/stable
 
     [generators]
     txt
@@ -41,7 +40,7 @@ The example below shows the commands used to publish to bincrafters conan reposi
 
 The following command both runs all the steps of the conan file, and publishes the package to the local system cache. 
 
-    $ conan create bincrafters/testing
+    $ conan create bincrafters/stable
 	
 ## Add Remote
 
@@ -49,7 +48,7 @@ The following command both runs all the steps of the conan file, and publishes t
 
 ## Upload
 
-    $ conan upload java_installer/8.0.144@bincrafters/testing --all -r bincrafters
+    $ conan upload java_installer/8.0.144@bincrafters/stable --all -r bincrafters
 
 	
 ## License
