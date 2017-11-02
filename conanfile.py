@@ -9,7 +9,11 @@ class JavaInstallerConan(ConanFile):
     url = "https://github.com/bincrafters/conan-java_installer"
     description = "Java installer distributed via Conan"
     license = "https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/"
-    settings = "os"
+    settings = "os", "arch"
+
+    def config_options(self):    
+        if self.settings.arch != "x86_64":
+            raise Exception("Unsupported Architecture.  This package currently only supports x86_64.")
     
     def build(self):
         source_file = "zulu9.0.0.15-jdk{0}-{1}_x64"
