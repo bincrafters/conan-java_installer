@@ -2,16 +2,16 @@ from conans import ConanFile, tools
 from conans.tools import os_info
 import os
 
+
 class JavaInstallerConan(ConanFile):
     name = "java_installer"
     version = "9.0.0"
     url = "https://github.com/bincrafters/conan-java_installer"
     description = "Java installer distributed via Conan"
     license = "https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/"
-    no_copy_source = True
     settings = "os"
     
-    def source(self):
+    def build(self):
         source_file = "zulu9.0.0.15-jdk{0}-{1}_x64"
         
         if os_info.is_windows:
@@ -34,8 +34,8 @@ class JavaInstallerConan(ConanFile):
         tools.check_md5(bin_filename, checksum)
         tools.unzip(bin_filename)
         os.unlink(bin_filename)
-        os.rename(source_file, "java")   
-                    
+        os.rename(source_file, "java")
+
     def package(self):
         self.copy(pattern="*", dst=".", src="java")
 
