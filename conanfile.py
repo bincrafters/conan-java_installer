@@ -9,10 +9,9 @@ class JavaInstallerConan(ConanFile):
     url = "https://github.com/bincrafters/conan-java_installer"
     description = "Java installer distributed via Conan"
     license = "https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/"
-    no_copy_source = True
     settings = "os"
     
-    def source(self):
+    def build(self):
         source_file = "zulu9.0.0.15-jdk{0}-{1}_x64"
         
         if os_info.is_windows:
