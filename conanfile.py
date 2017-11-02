@@ -1,6 +1,6 @@
-from conans import ConanFile, tools, os
+from conans import ConanFile, tools
 from conans.tools import os_info
-
+import os
 
 class JavaInstallerConan(ConanFile):
     name = "java_installer"
