@@ -48,5 +48,5 @@ class JavaInstallerConan(ConanFile):
         self.output.info("Appending PATH environment variable with : {0}".format(bin_path))
         self.env_info.path.append(bin_path)
         
-        self.output.info("Creating JAVA_HOME environment variable with : {0}".format(bin_path))
+        self.output.info("Creating JAVA_HOME environment variable with : {0}".format(self.package_folder))
         self.env_info.JAVA_HOME = os.path.join(self.package_folder)
