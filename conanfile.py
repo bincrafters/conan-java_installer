@@ -11,13 +11,25 @@ class JavaInstallerConan(ConanFile):
     license = "https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/"
     settings = "os", "arch"
 
-    def config_options(self):    
+    @property
+    def jni_folder(self):
+        if os_info.is_windows:
+            folder = "win32"
+        elif os_info.is_macos:
+            folder = "darwin"
+        elif os_info.is_linux:
+            folder = "linux"
+        else:
+            raise Exception("Unsupported System. This package currently only support Linux/Darwin/Windows")
+        return os.path.join("include", folder)
+
+    def config_options(self):
         if self.settings.arch != "x86_64":
             raise Exception("Unsupported Architecture.  This package currently only supports x86_64.")
-    
+
     def build(self):
         source_file = "zulu9.0.0.15-jdk{0}-{1}_x64"
-        
+
         if os_info.is_windows:
             source_file = source_file.format(self.version, "win")
             ext = "zip"
@@ -30,7 +42,7 @@ class JavaInstallerConan(ConanFile):
             source_file = source_file.format(self.version, "macosx")
             ext = "tar.gz"
             checksum = "b99e113f29fc0fad71b696d099e93366"
-            
+
         bin_filename = "{0}.{1}".format(source_file, ext)
         download_url = "http://cdn.azul.com/zulu/bin/{0}".format(bin_filename)
         self.output.info("Downloading : {0}".format(download_url))
@@ -47,6 +59,8 @@ class JavaInstallerConan(ConanFile):
         bin_path = os.path.join(self.package_folder, "bin")
         self.output.info("Appending PATH environment variable with : {0}".format(bin_path))
         self.env_info.path.append(bin_path)
-        
+
+        # do not forget to add the platform-specific JNI folder
+        self.cpp_info.includedirs.append(self.jni_folder)
         self.output.info("Creating JAVA_HOME environment variable with : {0}".format(bin_path))
         self.env_info.JAVA_HOME = os.path.join(self.package_folder)
