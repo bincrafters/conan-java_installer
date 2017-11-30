@@ -1,6 +1,7 @@
 from conans import ConanFile, tools
 from conans.tools import os_info
 import os
+import platform
 
 
 class JavaInstallerConan(ConanFile):
@@ -13,19 +14,15 @@ class JavaInstallerConan(ConanFile):
 
     @property
     def jni_folder(self):
-        if os_info.is_windows:
-            folder = "win32"
-        elif os_info.is_macos:
-            folder = "darwin"
-        elif os_info.is_linux:
-            folder = "linux"
-        else:
-            raise Exception("Unsupported System. This package currently only support Linux/Darwin/Windows")
+        folder = {"Linux": "linux", "Darwin": "darwin", "Windows": "win32"}.get(platform.system())
         return os.path.join("include", folder)
 
     def config_options(self):
-        if self.settings.arch != "x86_64":
+        # Checking against self.settings.* would prevent cross-building profiles from working
+        if tools.detected_architecture() != "x86_64":
             raise Exception("Unsupported Architecture.  This package currently only supports x86_64.")
+        if platform.system() not in ["Windows", "Darwin", "Linux"]:
+            raise Exception("Unsupported System. This package currently only support Linux/Darwin/Windows")
 
     def build(self):
         source_file = "zulu9.0.0.15-jdk{0}-{1}_x64"
