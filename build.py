@@ -45,8 +45,14 @@ if __name__ == "__main__":
     username, channel, version = get_env_vars()
     reference = "{0}/{1}".format(name, version)
     upload = "https://api.bintray.com/conan/{0}/public-conan".format(username)
-
-    builder = ConanMultiPackager(username=username, channel=channel, reference=reference, upload=upload,
-                                 upload_only_when_stable=False, stable_branch_pattern="stable/*")
+    builder = ConanMultiPackager(
+        username=username, 
+        channel=channel, 
+        reference=reference, 
+        upload=upload,
+        remotes=upload, #while redundant, this moves bincrafters remote to position 0
+        upload_only_when_stable=True, 
+        stable_branch_pattern="stable/*")
+        
     builder.add({"os" : get_os(), "arch" : "x86_64"}, {}, {}, {}) 
     builder.run()
