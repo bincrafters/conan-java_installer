@@ -43,16 +43,14 @@ class JavaInstallerConan(ConanFile):
         bin_filename = "{0}.{1}".format(source_file, ext)
         download_url = "http://cdn.azul.com/zulu/bin/{0}".format(bin_filename)
         self.output.info("Downloading : {0}".format(download_url))
-        tools.download(download_url, bin_filename)
-        tools.check_md5(bin_filename, checksum)
-        tools.unzip(bin_filename)
-        os.unlink(bin_filename)
-        os.rename(source_file, "java")
+        tools.get(download_url, md5=checksum)
+        os.rename(source_file, "sources")
 
-
+		
     def package(self):
-        self.copy(pattern="*", dst=".", src="java")
-
+        self.copy(pattern="*", dst=".", src="sources")
+		
+		
     def package_info(self):
         self.cpp_info.includedirs.append(self.jni_folder)
 
