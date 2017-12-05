@@ -43,21 +43,20 @@ class JavaInstallerConan(ConanFile):
         bin_filename = "{0}.{1}".format(source_file, ext)
         download_url = "http://cdn.azul.com/zulu/bin/{0}".format(bin_filename)
         self.output.info("Downloading : {0}".format(download_url))
-        tools.download(download_url, bin_filename)
-        tools.check_md5(bin_filename, checksum)
-        tools.unzip(bin_filename)
-        os.unlink(bin_filename)
-        os.rename(source_file, "java")
+        tools.get(download_url, md5=checksum)
+        os.rename(source_file, "sources")
 
     def package(self):
-        self.copy(pattern="*", dst=".", src="java")
-
+        self.copy(pattern="*", dst=".", src="sources")
+        
     def package_info(self):
-        bin_path = os.path.join(self.package_folder, "bin")
+        self.cpp_info.includedirs.append(self.jni_folder)
+
+        java_home = os.path.join(self.package_folder)
+        bin_path = os.path.join(java_home, "bin")
+
+        self.output.info("Creating JAVA_HOME environment variable with : {0}".format(java_home))
+        self.env_info.JAVA_HOME = java_home
+        
         self.output.info("Appending PATH environment variable with : {0}".format(bin_path))
         self.env_info.path.append(bin_path)
-
-        # do not forget to add the platform-specific JNI folder
-        self.cpp_info.includedirs.append(self.jni_folder)
-        self.output.info("Creating JAVA_HOME environment variable with : {0}".format(bin_path))
-        self.env_info.JAVA_HOME = os.path.join(self.package_folder)
