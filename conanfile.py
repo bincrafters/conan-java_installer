@@ -1,17 +1,20 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from conans import ConanFile, tools
-from conans.tools import os_info
 import os
 import platform
 
 
 class JavaInstallerConan(ConanFile):
     name = "java_installer"
-    version = "8.0.144"
+    # x86 is 8.0.153, while x86_64 is 8.0.152
+    version = "8.0.153"
     url = "https://github.com/bincrafters/conan-java_installer"
     description = "Java installer distributed via Conan"
     license = "https://www.azul.com/products/zulu-and-zulu-enterprise/zulu-terms-of-use/"
-    settings = "os", "arch"
-	
+    settings = "os_build", "arch_build"
+
     @property
     def jni_folder(self):
         folder = {"Linux": "linux", "Darwin": "darwin", "Windows": "win32"}.get(platform.system())
@@ -19,26 +22,32 @@ class JavaInstallerConan(ConanFile):
 
     def config_options(self):
         # Checking against self.settings.* would prevent cross-building profiles from working
-        if tools.detected_architecture() != "x86_64":
-            raise Exception("Unsupported Architecture.  This package currently only supports x86_64.")
-        if platform.system() not in ["Windows", "Darwin", "Linux"]:
+        if self.settings.arch_build not in ["x86_64", "x86"]:
+            raise Exception("Unsupported Architecture.  This package currently only supports x86_64 and x86.")
+        if self.settings.os_build not in ["Windows", "Macos", "Linux"]:
             raise Exception("Unsupported System. This package currently only support Linux/Darwin/Windows")
+        if self.settings.os_build == "Macos" and self.settings.arch_build == "x86":
+            raise Exception("Unsupported System (32-bit Mac OS X)")
 
     def build(self):
-        source_file = "zulu8.23.0.3-jdk{0}-{1}_x64"
+        x64 = self.settings.arch_build == 'x86_64'
+        source_file = "zulu8.{0}-jdk{1}-{2}_{3}"
+        zulu_version = '25.0.1' if x64 else '25.0.3'
+        version = '8.0.152' if x64 else '8.0.153'
+        arch = 'x64' if x64 else 'i686'
 
-        if os_info.is_windows:
-            source_file = source_file.format(self.version, "win")
+        if self.settings.os_build == 'Windows':
+            source_file = source_file.format(zulu_version, version, "win", arch)
             ext = "zip"
-            checksum = "85044428c21350a1c2b1aa93d3002c8f"
-        if os_info.is_linux:
-            source_file = source_file.format(self.version, "linux")
+            checksum = "754bd10d29212c817dfad8758a8df9bc" if x64 else "67752bd3cb8356215900883b55a8c26c"
+        elif self.settings.os_build == 'Linux':
+            source_file = source_file.format(zulu_version, version, "linux", arch)
             ext = "tar.gz"
-            checksum = "6ecd67688407b9f7e45c2736f003398b"
-        if os_info.is_macos:
-            source_file = source_file.format(self.version, "macosx")
+            checksum = "cc6e9ff13c27d27033220208d5450f2d" if x64 else "99da96ba61ccb53aab85261d4746b51c"
+        elif self.settings.os_build == 'Macos':
+            source_file = source_file.format(zulu_version, version, "macosx", arch)
             ext = "tar.gz"
-            checksum = "a82e78c9cd32deade2d6b44c2bdea133"
+            checksum = "cc6e9ff13c27d27033220208d5450f2d"
 
         bin_filename = "{0}.{1}".format(source_file, ext)
         download_url = "http://cdn.azul.com/zulu/bin/{0}".format(bin_filename)
@@ -46,11 +55,9 @@ class JavaInstallerConan(ConanFile):
         tools.get(download_url, md5=checksum)
         os.rename(source_file, "sources")
 
-		
     def package(self):
         self.copy(pattern="*", dst=".", src="sources")
-		
-		
+
     def package_info(self):
         self.cpp_info.includedirs.append(self.jni_folder)
 
@@ -62,4 +69,3 @@ class JavaInstallerConan(ConanFile):
         
         self.output.info("Appending PATH environment variable with : {0}".format(bin_path))
         self.env_info.path.append(bin_path)
-        
