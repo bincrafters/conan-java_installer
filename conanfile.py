@@ -47,7 +47,7 @@ class JavaInstallerConan(ConanFile):
         elif self.settings.os_build == 'Macos':
             source_file = source_file.format(zulu_version, version, "macosx", arch)
             ext = "tar.gz"
-            checksum = "cc6e9ff13c27d27033220208d5450f2d"
+            checksum = "0348962b47bf5197e7b5e78cfd073d84"
 
         bin_filename = "{0}.{1}".format(source_file, ext)
         download_url = "http://cdn.azul.com/zulu/bin/{0}".format(bin_filename)
